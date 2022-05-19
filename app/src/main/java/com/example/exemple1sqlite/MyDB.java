@@ -43,9 +43,7 @@ public class MyDB extends SQLiteOpenHelper {
 
     public static ArrayList<Student> getAllStudent(SQLiteDatabase sqLiteDatabase){
         ArrayList<Student> stds = new ArrayList<>();
-
         Cursor cur = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME,null);
-
         while(cur.moveToNext()){
             Student s = new Student();
             s.setId(cur.getInt(0));
@@ -56,4 +54,30 @@ public class MyDB extends SQLiteOpenHelper {
         }
         return stds;
     }
+
+    public static long update_etudiant(SQLiteDatabase sqLiteDatabase, Student s){
+
+        ContentValues c = new ContentValues();
+        c.put(COL2,s.getNom());
+        c.put(COL3,s.getPrenom());
+        return sqLiteDatabase.update(TABLE_NAME,c,"ID = " + s.getId(),null);
+    }
+
+    public static long delete_etudiant(SQLiteDatabase sqLiteDatabase, int id) {
+        return  sqLiteDatabase.delete(TABLE_NAME,"ID = " + id,null);
+    }
+
+    public static Student getOneStudent(SQLiteDatabase sqLiteDatabase, int id){
+        Student s = null;
+
+        Cursor cur = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE ID = " + id,null);
+        if(cur.moveToNext()){
+            s.setId(cur.getInt(0));
+            s.setNom(cur.getString(1));
+            s.setPrenom(cur.getString(2));
+        }
+        return s;
+    }
+
+
 }
