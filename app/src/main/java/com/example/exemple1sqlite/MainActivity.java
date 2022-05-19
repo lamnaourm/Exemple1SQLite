@@ -4,13 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     MyDB db;
     EditText e1, e2;
+    ListView lst;
+    ArrayAdapter ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,20 @@ public class MainActivity extends AppCompatActivity {
         db = new MyDB(this);
         e1 = findViewById(R.id.enom);
         e2 = findViewById(R.id.eprenom);
+        lst = findViewById(R.id.lst);
+
+
+        ArrayList<Student> st = MyDB.getAllStudent(db.getReadableDatabase());
+
+
+        ArrayList<String> listitems = new ArrayList<>();
+        for(Student ss : st)
+            listitems.add(ss.getNom() + " - " + ss.getPrenom());
+
+        ad = new ArrayAdapter(this, android.R.layout.simple_list_item_1,listitems);
+        lst.setAdapter(ad);
+
+
 
       /*  Student s1 = new Student(1,"SSSSS","HHHHH");
         Student s2 = new Student(1,"AAAAA","BBBBB");
@@ -50,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Insertion echoue", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(this, "Insertion reussie", Toast.LENGTH_SHORT).show();
+            ad.add(st.getNom() + " - " + st.getPrenom());
         }
     }
 }

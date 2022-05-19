@@ -2,8 +2,11 @@ package com.example.exemple1sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class MyDB extends SQLiteOpenHelper {
 
@@ -36,5 +39,21 @@ public class MyDB extends SQLiteOpenHelper {
         c.put(COL2,s.getNom());
         c.put(COL3,s.getPrenom());
         return  sqLiteDatabase.insert(TABLE_NAME,null,c);
+    }
+
+    public static ArrayList<Student> getAllStudent(SQLiteDatabase sqLiteDatabase){
+        ArrayList<Student> stds = new ArrayList<>();
+
+        Cursor cur = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME,null);
+
+        while(cur.moveToNext()){
+            Student s = new Student();
+            s.setId(cur.getInt(0));
+            s.setNom(cur.getString(1));
+            s.setPrenom(cur.getString(2));
+
+            stds.add(s);
+        }
+        return stds;
     }
 }
